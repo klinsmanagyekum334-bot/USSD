@@ -51,9 +51,16 @@ NETWORK_SWITCH_CODES = {
     "TELECEL": "VDF",   # Telecel Cash (formerly Vodafone Cash)
 }
 
+
+# ============================================================
+# ARKESEL SMS SETTINGS
+# ============================================================
+
 ARKESEL_API_KEY = os.environ.get("ARKESEL_API_KEY", "")
 ARKESEL_SENDER_ID = os.environ.get("ARKESEL_SENDER_ID", "EasyData")
-ARKESEL_URL = "https://sms.arkesel.com/api/v2/sms/send"
+
+# This is the SMS API URL shown in your Arkesel account
+ARKESEL_URL = "https://sms.arkesel.com/sms/api"
 
 
 def _basic_auth_header() -> str:
@@ -62,7 +69,12 @@ def _basic_auth_header() -> str:
     return "Basic " + base64.b64encode(raw).decode("utf-8")
 
 
-def initiate_momo_charge(phone_number: str, amount_ghs: float, network: str, reference: str) -> dict:
+def initiate_momo_charge(
+    phone_number: str,
+    amount_ghs: float,
+    network: str,
+    reference: str
+) -> dict:
     """
     Sends a charge request to PaySwitch (TheTeller), which triggers the
     MoMo approval prompt on the customer's phone.
@@ -72,12 +84,24 @@ def initiate_momo_charge(phone_number: str, amount_ghs: float, network: str, ref
     not that the customer has paid yet - final confirmation still comes via
     your /payment-callback webhook.
     """
-    if not (PAYSWITCH_API_USER and PAYSWITCH_API_KEY and PAYSWITCH_MERCHANT_ID):
-        return {"status": False, "message": "Payment provider not configured (missing credentials)."}
+
+    if not (
+        PAYSWITCH_API_USER
+        and PAYSWITCH_API_KEY
+        and PAYSWITCH_MERCHANT_ID
+    ):
+        return {
+            "status": False,
+            "message": "Payment provider not configured (missing credentials)."
+        }
 
     switch_code = NETWORK_SWITCH_CODES.get(network)
+
     if not switch_code:
-        return {"status": False, "message": f"Unsupported network: {network}"}
+        return {
+            "status": False,
+            "message": f"Unsupported network: {network}"
+        }
 
     # PaySwitch expects amount as a 12-digit zero-padded string, in pesewas
     # (i.e. GHS 5.00 -> 500 pesewas -> "000000000500")
@@ -93,6 +117,7 @@ def initiate_momo_charge(phone_number: str, amount_ghs: float, network: str, ref
         "Authorization": _basic_auth_header(),
         "Cache-Control": "no-cache",
     }
+
     payload = {
         "amount": amount_str,
         "processing_code": MOMO_CHARGE_PROCESSING_CODE,
@@ -104,27 +129,51 @@ def initiate_momo_charge(phone_number: str, amount_ghs: float, network: str, ref
     }
 
     try:
-        response = requests.post(PAYSWITCH_CHARGE_URL, json=payload, headers=headers, timeout=15)
+        response = requests.post(
+            PAYSWITCH_CHARGE_URL,
+            json=payload,
+            headers=headers,
+            timeout=15
+        )
+
         data = response.json()
 
-        # PaySwitch responses typically include a "code" (e.g. "000" for
-        # success/accepted) - adjust this check if your account's responses
-        # differ, based on what you see in testing.
+        # PaySwitch responses typically include a "code"
+        # (e.g. "000" for success/accepted).
         code = str(data.get("code", ""))
+
         success = response.ok and code in ("000", "200")
 
         return {
             "status": success,
-            "message": data.get("reason") or data.get("message") or "Unknown response from payment provider.",
+            "message": (
+                data.get("reason")
+                or data.get("message")
+                or "Unknown response from payment provider."
+            ),
             "raw": data,
         }
+
     except requests.RequestException as e:
-        return {"status": False, "message": f"Payment request failed: {e}"}
+        return {
+            "status": False,
+            "message": f"Payment request failed: {e}"
+        }
+
     except ValueError:
-        return {"status": False, "message": "Payment provider returned an unexpected (non-JSON) response."}
+        return {
+            "status": False,
+            "message": (
+                "Payment provider returned an unexpected "
+                "(non-JSON) response."
+            )
+        }
 
 
-def verify_webhook_signature(request_body: bytes, signature_header: str) -> bool:
+def verify_webhook_signature(
+    request_body: bytes,
+    signature_header: str
+) -> bool:
     """
     Verifies that a webhook actually came from PaySwitch, using HMAC-SHA512
     over the raw request body with your webhook signing secret.
@@ -134,6 +183,7 @@ def verify_webhook_signature(request_body: bytes, signature_header: str) -> bool
     hashing scheme matches what's documented for your specific account -
     these details can vary by merchant integration.
     """
+
     import hmac
     import hashlib
 
@@ -146,30 +196,65 @@ def verify_webhook_signature(request_body: bytes, signature_header: str) -> bool
         hashlib.sha512,
     ).hexdigest()
 
-    return hmac.compare_digest(computed_signature, signature_header or "")
+    return hmac.compare_digest(
+        computed_signature,
+        signature_header or ""
+    )
 
+
+# ============================================================
+# ARKESEL SMS
+# ============================================================
 
 def send_sms(recipient: str, message: str) -> dict:
     """
-    Sends an SMS via Arkesel. Used here to notify the admin/support number
-    when a customer's payment is confirmed, so the order can be fulfilled.
-    """
-    if not ARKESEL_API_KEY:
-        return {"status": False, "message": "SMS provider not configured (missing API key)."}
+    Sends an SMS via Arkesel.
 
-    headers = {
-        "api-key": ARKESEL_API_KEY,
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "sender": ARKESEL_SENDER_ID,
-        "message": message,
-        "recipients": [recipient],
+    Uses the SMS API format shown in the Arkesel account:
+
+    https://sms.arkesel.com/sms/api
+        ?action=send-sms
+        &api_key=YOUR_API_KEY
+        &to=PHONE_NUMBER
+        &from=SENDER_ID
+        &sms=YOUR_MESSAGE
+    """
+
+    if not ARKESEL_API_KEY:
+        return {
+            "status": False,
+            "message": "SMS provider not configured (missing API key)."
+        }
+
+    # Parameters exactly according to the SMS API shown
+    # in your Arkesel account.
+    params = {
+        "action": "send-sms",
+        "api_key": ARKESEL_API_KEY,
+        "to": recipient,
+        "from": ARKESEL_SENDER_ID,
+        "sms": message,
     }
 
     try:
-        response = requests.post(ARKESEL_URL, json=payload, headers=headers, timeout=15)
-        data = response.json()
-        return {"status": response.ok, "message": data.get("message", "Sent"), "raw": data}
+        response = requests.get(
+            ARKESEL_URL,
+            params=params,
+            timeout=15
+        )
+
+        # Arkesel's API response may be plain text rather than JSON,
+        # so we keep the raw response.
+        response_text = response.text.strip()
+
+        return {
+            "status": response.ok,
+            "message": response_text or "SMS request completed.",
+            "raw": response_text,
+        }
+
     except requests.RequestException as e:
-        return {"status": False, "message": f"SMS request failed: {e}"}
+        return {
+            "status": False,
+            "message": f"SMS request failed: {e}"
+        }
