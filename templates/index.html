@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>USSD Simulator</title>
+<title>Easy Data Bundles - USSD</title>
 <style>
   :root {
     --bezel: #1c1c1e;
@@ -11,6 +11,8 @@
     --text-main: #1a1a1a;
     --accent: #2f6fed;
     --divider: #d8dade;
+    --error: #e74c3c;
+    --success: #27ae60;
   }
 
   * { box-sizing: border-box; }
@@ -57,6 +59,16 @@
     flex-shrink: 0;
   }
 
+  .ussd-header {
+    background: #1a1a1a;
+    color: white;
+    padding: 8px 16px;
+    font-size: 11px;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
   .stage {
     flex: 1;
     position: relative;
@@ -66,21 +78,25 @@
     position: absolute;
     left: 16px;
     right: 16px;
-    top: 40%;
+    top: 45%;
     transform: translateY(-50%);
     background: var(--dialog-bg);
     border-radius: 18px;
     padding: 20px 18px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    max-height: 420px;
+    overflow-y: auto;
   }
 
   .dialog-message {
     font-size: 14.5px;
-    line-height: 1.5;
+    line-height: 1.6;
     color: var(--text-main);
     white-space: pre-wrap;
     margin-bottom: 16px;
     min-height: 60px;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   .dialog-input {
@@ -92,6 +108,11 @@
     outline: none;
     background: transparent;
     color: var(--text-main);
+  }
+
+  .dialog-input:disabled {
+    opacity: 0.5;
+    border-bottom-color: #ccc;
   }
 
   .dialog-actions {
@@ -121,6 +142,9 @@
     margin-top: 14px;
   }
 
+  .end-banner .success { color: var(--success); }
+  .end-banner .error { color: var(--error); }
+
   .restart-row {
     display: flex;
     justify-content: center;
@@ -144,8 +168,12 @@
     left: 0;
     right: 0;
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
     color: #8b8f96;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 </style>
 </head>
@@ -155,31 +183,39 @@
     <div class="screen">
       <div class="statusbar">
         <span id="clock">21:50</span>
-        <span>USSD Simulator</span>
+        <span>📱 USSD</span>
+      </div>
+      <div class="ussd-header">
+        <span>Easy Data Bundles</span>
       </div>
 
       <div class="stage">
         <div class="dialog">
           <div class="dialog-message" id="message">Loading...</div>
           <div id="inputRow">
-            <input class="dialog-input" id="choiceInput" type="text" inputmode="numeric" placeholder="" autofocus>
+            <input class="dialog-input" id="choiceInput" type="text" inputmode="numeric" placeholder="Enter option" autofocus>
           </div>
           <div class="dialog-actions" id="actions">
             <button id="cancelBtn">Cancel</button>
             <button id="sendBtn">Send</button>
           </div>
-          <div class="end-banner" id="endBanner" style="display:none;">Session ended</div>
+          <div class="end-banner" id="endBanner" style="display:none;">
+            <span id="endStatus">Session ended</span>
+          </div>
           <div class="restart-row" id="restartRow" style="display:none;">
-            <button id="restartBtn">Dial again</button>
+            <button id="restartBtn">🔁 Start over</button>
           </div>
         </div>
-        <div class="dial-hint">Simulating *123# on a test SIM</div>
+        <div class="dial-hint">USSD Session</div>
       </div>
     </div>
   </div>
 
 <script>
   const sessionId = "sim-" + Math.random().toString(36).slice(2);
+  
+  // Your actual USSD code (used internally, not displayed)
+  const USSD_CODE = "*928*102#";
 
   const messageEl = document.getElementById("message");
   const inputEl = document.getElementById("choiceInput");
@@ -188,9 +224,11 @@
   const actionsEl = document.getElementById("actions");
   const inputRowEl = document.getElementById("inputRow");
   const endBannerEl = document.getElementById("endBanner");
+  const endStatusEl = document.getElementById("endStatus");
   const restartRowEl = document.getElementById("restartRow");
   const restartBtn = document.getElementById("restartBtn");
 
+  // Update clock
   function setClock() {
     const now = new Date();
     document.getElementById("clock").textContent =
@@ -201,32 +239,68 @@
   setInterval(setClock, 30000);
 
   async function callUssd(choice) {
-    const res = await fetch("/simulate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_id: sessionId, choice })
-    });
-    return res.json();
+    try {
+      const res = await fetch("/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId, choice })
+      });
+      
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+      
+      return await res.json();
+    } catch (error) {
+      return { 
+        message: `❌ Connection error: ${error.message}\nPlease check if server is running.`, 
+        ended: true 
+      };
+    }
   }
 
   function render(data) {
     messageEl.textContent = data.message;
+    
     if (data.ended) {
       inputRowEl.style.display = "none";
       actionsEl.style.display = "none";
       endBannerEl.style.display = "block";
       restartRowEl.style.display = "flex";
+      
+      if (data.message.includes("payment") || 
+          data.message.includes("approved") || 
+          data.message.includes("sent") ||
+          data.message.includes("prompt")) {
+        endStatusEl.textContent = "✅ Payment initiated - Check your phone";
+        endStatusEl.className = "success";
+      } else if (data.message.includes("error") || 
+                 data.message.includes("failed") || 
+                 data.message.includes("Invalid") ||
+                 data.message.includes("cancelled")) {
+        endStatusEl.textContent = "❌ Session ended - Please try again";
+        endStatusEl.className = "error";
+      } else {
+        endStatusEl.textContent = "📱 Session ended";
+        endStatusEl.className = "";
+      }
     } else {
       inputRowEl.style.display = "block";
       actionsEl.style.display = "flex";
       endBannerEl.style.display = "none";
       restartRowEl.style.display = "none";
       inputEl.value = "";
+      inputEl.disabled = false;
       inputEl.focus();
+      sendBtn.disabled = false;
     }
   }
 
   async function start() {
+    messageEl.textContent = "⏳ Connecting...";
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    
     const data = await callUssd(null);
     render(data);
   }
@@ -234,6 +308,11 @@
   sendBtn.addEventListener("click", async () => {
     const val = inputEl.value.trim();
     if (!val) return;
+    
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    messageEl.textContent = "⏳ Processing...";
+    
     const data = await callUssd(val);
     render(data);
   });
@@ -243,14 +322,18 @@
   });
 
   cancelBtn.addEventListener("click", () => {
-    messageEl.textContent = "Session cancelled by user.";
+    messageEl.textContent = "❌ Session cancelled by user.";
     inputRowEl.style.display = "none";
     actionsEl.style.display = "none";
     endBannerEl.style.display = "block";
+    endStatusEl.textContent = "Session cancelled";
+    endStatusEl.className = "error";
     restartRowEl.style.display = "flex";
   });
 
-  restartBtn.addEventListener("click", start);
+  restartBtn.addEventListener("click", () => {
+    window.location.reload();
+  });
 
   start();
 </script>
