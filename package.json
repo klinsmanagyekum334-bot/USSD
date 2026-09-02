@@ -1,0 +1,13 @@
+{
+  "name": "easy-data-bundle",
+  "version": "1.0.0",
+  "description": "EASY DATA BUNDLE with touch interface",
+  "main": "index.html",
+  "scripts": {
+    "start": "python app.py",
+    "dev": "python app.py"
+  },
+  "keywords": ["data", "bundle", "mobile", "money"],
+  "author": "Your Name",
+  "license": "MIT"
+}
