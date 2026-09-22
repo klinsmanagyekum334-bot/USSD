@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Books — Dr. Isaac Frimpong{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero placeholder-hero">
+    <div class="wrap">
+        <p class="eyebrow">{{ get('books_eyebrow', 'Books & Resources') }}</p>
+        <h1>{{ get('books_title', 'Something <span>worth reading</span> is on the way.') | safe }}</h1>
+        <p class="lead narrow">
+            {{ get('books_lead', "Dr. Isaac's books and written resources are being prepared for release. The purchase and download system will be available here soon.") }}
+        </p>
+
+        <div class="placeholder-meta">
+            <span class="dot"></span>
+            <span>{{ get('books_status', 'Page under development') }}</span>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== BODY ===== -->
+<section class="placeholder-body">
+    <div class="wrap narrow center">
+        <p class="eyebrow">{{ get('books_what_eyebrow', 'What to expect') }}</p>
+        <h2>{{ get('books_what_title', 'Written with the same care as every session.') }}</h2>
+
+        <p class="lead">
+            {{ get('books_what_lead', 'Practical, warm, and grounded in over 15 years of counseling experience — these resources are designed to support you long after the session ends.') }}
+        </p>
+
+        <div class="placeholder-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-solid">{{ get('books_cta_1', 'Back to home') }}</a>
+            <a href="{{ url_for('index') }}#contact" class="btn btn-line">{{ get('books_cta_2', 'Get notified') }}</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

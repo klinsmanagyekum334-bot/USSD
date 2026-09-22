@@ -1,0 +1,549 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard — Dr. Isaac Frimpong{% endblock %}
+
+{% block content %}
+
+<section class="admin-dashboard">
+    <div class="wrap">
+
+        <div class="admin-header">
+            <div>
+                <p class="eyebrow">Admin Mode</p>
+                <h2>Edit the website</h2>
+                <p class="admin-sub">
+                    Logged in as <strong>{{ user }}</strong>. Every field below is editable. Click <em>Save All Changes</em> when done.
+                </p>
+            </div>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-line">Log out</a>
+        </div>
+
+        <form id="adminForm">
+
+            <!-- ================= HOMEPAGE — HERO ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">🏠 Homepage — Hero</h3>
+
+                <label class="admin-field">
+                    <span>Eyebrow label</span>
+                    <input type="text" data-key="hero_eyebrow" value="{{ content.get('hero_eyebrow', '') }}">
+                </label>
+
+                <label class="admin-field">
+                    <span>Main headline (HTML allowed — e.g. &lt;span&gt;word&lt;/span&gt;)</span>
+                    <textarea rows="2" data-key="hero_title">{{ content.get('hero_title', '') }}</textarea>
+                </label>
+
+                <label class="admin-field">
+                    <span>Lead paragraph</span>
+                    <textarea rows="3" data-key="hero_lead">{{ content.get('hero_lead', '') }}</textarea>
+                </label>
+
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Primary button text</span>
+                        <input type="text" data-key="hero_btn_primary" value="{{ content.get('hero_btn_primary', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Secondary button text</span>
+                        <input type="text" data-key="hero_btn_secondary" value="{{ content.get('hero_btn_secondary', '') }}">
+                    </label>
+                </div>
+            </div>
+
+            <!-- ================= INTRO ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">🌟 Intro Section</h3>
+
+                <label class="admin-field">
+                    <span>Intro title</span>
+                    <input type="text" data-key="intro_title" value="{{ content.get('intro_title', '') }}">
+                </label>
+
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Link 1</span>
+                        <input type="text" data-key="intro_link_1" value="{{ content.get('intro_link_1', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Link 2</span>
+                        <input type="text" data-key="intro_link_2" value="{{ content.get('intro_link_2', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Link 3</span>
+                        <input type="text" data-key="intro_link_3" value="{{ content.get('intro_link_3', '') }}">
+                    </label>
+                </div>
+            </div>
+
+            <!-- ================= SITUATIONS ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">💭 Situations</h3>
+
+                <label class="admin-field">
+                    <span>Section title</span>
+                    <input type="text" data-key="situations_title" value="{{ content.get('situations_title', '') }}">
+                </label>
+
+                <div class="admin-row">
+                    {% for i in range(1, 9) %}
+                    <label class="admin-field">
+                        <span>Situation {{ i }}</span>
+                        <input type="text" data-key="situation_{{ i }}" value="{{ content.get('situation_' ~ i, '') }}">
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- ================= TESTIMONIALS ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">💬 Testimonials</h3>
+
+                {% for i in range(1, 6) %}
+                <div class="admin-testimonial">
+                    <p class="admin-mini-title">Testimonial {{ i }}</p>
+
+                    <label class="admin-field">
+                        <span>Quote</span>
+                        <textarea rows="2" data-key="quote_{{ i }}_text">{{ content.get('quote_' ~ i ~ '_text', '') }}</textarea>
+                    </label>
+
+                    <div class="admin-row">
+                        <label class="admin-field">
+                            <span>Name</span>
+                            <input type="text" data-key="quote_{{ i }}_name" value="{{ content.get('quote_' ~ i ~ '_name', '') }}">
+                        </label>
+                        <label class="admin-field">
+                            <span>Role / context</span>
+                            <input type="text" data-key="quote_{{ i }}_role" value="{{ content.get('quote_' ~ i ~ '_role', '') }}">
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- ================= CONTACT ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">📞 Contact Section</h3>
+
+                <label class="admin-field">
+                    <span>Title</span>
+                    <input type="text" data-key="contact_title" value="{{ content.get('contact_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Lead</span>
+                    <input type="text" data-key="contact_lead" value="{{ content.get('contact_lead', '') }}">
+                </label>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Phone</span>
+                        <input type="text" data-key="contact_phone" value="{{ content.get('contact_phone', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Email</span>
+                        <input type="text" data-key="contact_email" value="{{ content.get('contact_email', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Location</span>
+                        <input type="text" data-key="contact_location" value="{{ content.get('contact_location', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Hours</span>
+                        <input type="text" data-key="contact_hours" value="{{ content.get('contact_hours', '') }}">
+                    </label>
+                </div>
+            </div>
+
+            <!-- ================= ABOUT PAGE ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">👤 About Page — Intro</h3>
+
+                <label class="admin-field">
+                    <span>Title</span>
+                    <input type="text" data-key="about_title" value="{{ content.get('about_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Lead</span>
+                    <textarea rows="2" data-key="about_lead">{{ content.get('about_lead', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Profile photo — paste URL or upload below</span>
+                    <input type="text" data-key="about_photo" id="aboutPhotoInput" value="{{ content.get('about_photo', '') }}" placeholder="/static/uploads/… or /static/images/dr-2.jpg">
+                </label>
+                <label class="admin-field">
+                    <span>Quote under photo</span>
+                    <textarea rows="2" data-key="about_quote">{{ content.get('about_quote', '') }}</textarea>
+                </label>
+            </div>
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">📖 About Page — Bio</h3>
+
+                <label class="admin-field">
+                    <span>Bio heading</span>
+                    <input type="text" data-key="about_bio_title" value="{{ content.get('about_bio_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Paragraph 1</span>
+                    <textarea rows="3" data-key="about_bio_p1">{{ content.get('about_bio_p1', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Paragraph 2</span>
+                    <textarea rows="3" data-key="about_bio_p2">{{ content.get('about_bio_p2', '') }}</textarea>
+                </label>
+            </div>
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">✅ Checklist</h3>
+                <div class="admin-row">
+                    {% for i in range(1, 7) %}
+                    <label class="admin-field">
+                        <span>Checklist item {{ i }}</span>
+                        <input type="text" data-key="about_check_{{ i }}" value="{{ content.get('about_check_' ~ i, '') }}">
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">🎓 Credentials</h3>
+                <label class="admin-field">
+                    <span>Section title</span>
+                    <input type="text" data-key="credentials_title" value="{{ content.get('credentials_title', '') }}">
+                </label>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Card 1 — big number</span>
+                        <input type="text" data-key="cred_1_num" value="{{ content.get('cred_1_num', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Card 1 — label</span>
+                        <input type="text" data-key="cred_1_text" value="{{ content.get('cred_1_text', '') }}">
+                    </label>
+                </div>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Card 2 — big number</span>
+                        <input type="text" data-key="cred_2_num" value="{{ content.get('cred_2_num', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Card 2 — label</span>
+                        <input type="text" data-key="cred_2_text" value="{{ content.get('cred_2_text', '') }}">
+                    </label>
+                </div>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Card 3 — big number</span>
+                        <input type="text" data-key="cred_3_num" value="{{ content.get('cred_3_num', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Card 3 — label</span>
+                        <input type="text" data-key="cred_3_text" value="{{ content.get('cred_3_text', '') }}">
+                    </label>
+                </div>
+                <label class="admin-field">
+                    <span>Note below cards</span>
+                    <textarea rows="2" data-key="credentials_note">{{ content.get('credentials_note', '') }}</textarea>
+                </label>
+            </div>
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">🛡️ Why Clients Trust</h3>
+
+                <label class="admin-field">
+                    <span>Eyebrow</span>
+                    <input type="text" data-key="trust_eyebrow" value="{{ content.get('trust_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Section title</span>
+                    <input type="text" data-key="trust_title" value="{{ content.get('trust_title', '') }}">
+                </label>
+
+                {% for i in range(1, 7) %}
+                <div class="admin-testimonial">
+                    <p class="admin-mini-title">Trust item {{ i }}</p>
+                    <div class="admin-row">
+                        <label class="admin-field">
+                            <span>Title</span>
+                            <input type="text" data-key="trust_{{ i }}_title" value="{{ content.get('trust_' ~ i ~ '_title', '') }}">
+                        </label>
+                        <label class="admin-field">
+                            <span>Description</span>
+                            <input type="text" data-key="trust_{{ i }}_desc" value="{{ content.get('trust_' ~ i ~ '_desc', '') }}">
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">🪜 How It Works</h3>
+
+                <label class="admin-field">
+                    <span>Eyebrow</span>
+                    <input type="text" data-key="how_eyebrow" value="{{ content.get('how_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Section title</span>
+                    <input type="text" data-key="how_title" value="{{ content.get('how_title', '') }}">
+                </label>
+
+                {% for i in range(1, 4) %}
+                <div class="admin-testimonial">
+                    <p class="admin-mini-title">Step {{ i }}</p>
+                    <label class="admin-field">
+                        <span>Step title</span>
+                        <input type="text" data-key="how_step_{{ i }}_title" value="{{ content.get('how_step_' ~ i ~ '_title', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Step description</span>
+                        <textarea rows="2" data-key="how_step_{{ i }}_desc">{{ content.get('how_step_' ~ i ~ '_desc', '') }}</textarea>
+                    </label>
+                </div>
+                {% endfor %}
+
+                <label class="admin-field">
+                    <span>Bottom CTA text</span>
+                    <input type="text" data-key="how_cta" value="{{ content.get('how_cta', '') }}">
+                </label>
+            </div>
+
+            <!-- ================= SERVICES PAGE ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">🛠️ Services Page — Intro</h3>
+
+                <label class="admin-field">
+                    <span>Eyebrow</span>
+                    <input type="text" data-key="services_eyebrow" value="{{ content.get('services_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Title (HTML allowed)</span>
+                    <textarea rows="2" data-key="services_title">{{ content.get('services_title', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Lead</span>
+                    <textarea rows="2" data-key="services_lead">{{ content.get('services_lead', '') }}</textarea>
+                </label>
+            </div>
+
+            {% for i in range(1, 5) %}
+            <div class="admin-group">
+                <h3 class="admin-group-title">🔹 Service {{ i }}</h3>
+                <label class="admin-field">
+                    <span>Title</span>
+                    <input type="text" data-key="service_{{ i }}_title" value="{{ content.get('service_' ~ i ~ '_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Description</span>
+                    <textarea rows="3" data-key="service_{{ i }}_desc">{{ content.get('service_' ~ i ~ '_desc', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Meta line</span>
+                    <input type="text" data-key="service_{{ i }}_meta" value="{{ content.get('service_' ~ i ~ '_meta', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>CTA text</span>
+                    <input type="text" data-key="service_{{ i }}_cta" value="{{ content.get('service_{{ i }}_cta', '') }}">
+                </label>
+            </div>
+            {% endfor %}
+
+            <div class="admin-group">
+                <h3 class="admin-group-title">📣 Closing CTA (Services)</h3>
+                <label class="admin-field">
+                    <span>Eyebrow</span>
+                    <input type="text" data-key="closing_eyebrow" value="{{ content.get('closing_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Title</span>
+                    <input type="text" data-key="closing_title" value="{{ content.get('closing_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Lead</span>
+                    <textarea rows="2" data-key="closing_lead">{{ content.get('closing_lead', '') }}</textarea>
+                </label>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Button 1 text</span>
+                        <input type="text" data-key="closing_cta_1" value="{{ content.get('closing_cta_1', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Button 2 text</span>
+                        <input type="text" data-key="closing_cta_2" value="{{ content.get('closing_cta_2', '') }}">
+                    </label>
+                </div>
+            </div>
+
+            <!-- ================= BOOKS PAGE ================= -->
+            <div class="admin-group">
+                <h3 class="admin-group-title">📚 Books Page</h3>
+
+                <label class="admin-field">
+                    <span>Eyebrow</span>
+                    <input type="text" data-key="books_eyebrow" value="{{ content.get('books_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>Title (HTML allowed)</span>
+                    <textarea rows="2" data-key="books_title">{{ content.get('books_title', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Lead</span>
+                    <textarea rows="2" data-key="books_lead">{{ content.get('books_lead', '') }}</textarea>
+                </label>
+                <label class="admin-field">
+                    <span>Status badge text</span>
+                    <input type="text" data-key="books_status" value="{{ content.get('books_status', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>"What to expect" label</span>
+                    <input type="text" data-key="books_what_eyebrow" value="{{ content.get('books_what_eyebrow', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>"What to expect" title</span>
+                    <input type="text" data-key="books_what_title" value="{{ content.get('books_what_title', '') }}">
+                </label>
+                <label class="admin-field">
+                    <span>"What to expect" paragraph</span>
+                    <textarea rows="2" data-key="books_what_lead">{{ content.get('books_what_lead', '') }}</textarea>
+                </label>
+                <div class="admin-row">
+                    <label class="admin-field">
+                        <span>Button 1 text</span>
+                        <input type="text" data-key="books_cta_1" value="{{ content.get('books_cta_1', '') }}">
+                    </label>
+                    <label class="admin-field">
+                        <span>Button 2 text</span>
+                        <input type="text" data-key="books_cta_2" value="{{ content.get('books_cta_2', '') }}">
+                    </label>
+                </div>
+            </div>
+
+            <!-- ================= LOCKED ================= -->
+            <div class="admin-group admin-locked">
+                <h3 class="admin-group-title">🔒 Locked — cannot be edited</h3>
+                <label class="admin-field">
+                    <span>Developer credit</span>
+                    <input type="text" value="{{ content.get('dev_credit', 'Developed by Ophyser — 0240044138') }}" disabled>
+                </label>
+            </div>
+
+            <!-- ================= SAVE BAR ================= -->
+            <div class="admin-save-bar">
+                <button type="button" id="saveAll" class="btn btn-solid">💾 Save All Changes</button>
+                <span id="saveStatus" class="admin-status"></span>
+            </div>
+
+        </form>
+
+        <!-- ================= IMAGE UPLOAD ================= -->
+        <div class="admin-group">
+            <h3 class="admin-group-title">🖼️ Upload Image</h3>
+            <p class="admin-sub">
+                Upload any image — it will be saved to your site automatically.
+                Copy the URL below and paste it into the "About profile photo" field (or any image field).
+            </p>
+
+            <input type="file" id="imageUpload" accept="image/*">
+            <div id="imageUploadStatus" class="admin-status"></div>
+            <div id="imagePreviewWrap" class="admin-image-preview" style="display:none;">
+                <img id="imagePreview" alt="Uploaded preview">
+                <input type="text" id="imageUrl" readonly onclick="this.select()">
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---------- SAVE ALL EDITS ---------- */
+    const saveBtn = document.getElementById('saveAll');
+    const saveStatus = document.getElementById('saveStatus');
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async () => {
+            const fields = document.querySelectorAll('#adminForm [data-key]');
+            const payload = {};
+            fields.forEach(f => {
+                if (f.disabled) return;
+                payload[f.dataset.key] = f.value;
+            });
+
+            saveStatus.textContent = 'Saving...';
+            saveStatus.style.color = '#facc15';
+
+            try {
+                const res = await fetch('/admin/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    saveStatus.textContent = '✅ Saved! Refresh the site to see changes.';
+                    saveStatus.style.color = '#22c55e';
+                } else {
+                    saveStatus.textContent = '❌ ' + (data.error || 'Save failed');
+                    saveStatus.style.color = '#ef4444';
+                }
+            } catch (err) {
+                saveStatus.textContent = '❌ Network error';
+                saveStatus.style.color = '#ef4444';
+            }
+        });
+    }
+
+    /* ---------- IMAGE UPLOAD ---------- */
+    const fileInput = document.getElementById('imageUpload');
+    const statusEl = document.getElementById('imageUploadStatus');
+    const previewWrap = document.getElementById('imagePreviewWrap');
+    const previewImg = document.getElementById('imagePreview');
+    const urlInput = document.getElementById('imageUrl');
+    const aboutPhotoInput = document.getElementById('aboutPhotoInput');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', async () => {
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            statusEl.textContent = 'Uploading...';
+            statusEl.style.color = '#facc15';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/admin/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.ok) {
+                    statusEl.textContent = '✅ Uploaded!';
+                    statusEl.style.color = '#22c55e';
+                    previewWrap.style.display = 'block';
+                    previewImg.src = data.url;
+                    urlInput.value = data.url;
+
+                    // Convenience: also copy into About photo input
+                    if (aboutPhotoInput) {
+                        aboutPhotoInput.value = data.url;
+                    }
+                } else {
+                    statusEl.textContent = '❌ ' + (data.error || 'Upload failed');
+                    statusEl.style.color = '#ef4444';
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Network error';
+                statusEl.style.color = '#ef4444';
+            }
+        });
+    }
+
+});
+</script>
+{% endblock %}

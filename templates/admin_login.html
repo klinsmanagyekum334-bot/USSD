@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login — Dr. Isaac Frimpong{% endblock %}
+
+{% block content %}
+
+<section class="admin-login-wrap">
+    <div class="admin-login-card">
+
+        <p class="eyebrow center">Admin Access</p>
+        <h2 class="center">Sign in to edit the site.</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('admin_login') }}" class="admin-form">
+            <label>
+                <span>Username</span>
+                <input type="text" name="username" placeholder="Enter username" required autofocus>
+            </label>
+
+            <label>
+                <span>Password</span>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </label>
+
+            <button type="submit" class="btn btn-solid">Log in</button>
+        </form>
+
+        <p class="admin-hint">
+            Authorized personnel only.
+        </p>
+
+    </div>
+</section>
+
+{% endblock %}

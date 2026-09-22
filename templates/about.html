@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}About — Dr. Isaac Frimpong{% endblock %}
+
+{% block content %}
+
+<!-- ===== ABOUT INTRO ===== -->
+<section class="page-hero">
+    <div class="wrap">
+        <p class="eyebrow">About</p>
+        <h1>{{ get('about_title', 'Meet Dr. Isaac Frimpong') | safe }}</h1>
+        <p class="lead narrow">
+            {{ get('about_lead', "With over 15 years of experience supporting individuals through life's most challenging moments, I offer a warm, professional space where you can be heard, valued, and guided with dignity.") }}
+        </p>
+    </div>
+</section>
+
+
+<!-- ===== BIO + PHOTO ===== -->
+<section class="bio">
+    <div class="wrap bio-wrap">
+
+        <div class="bio-photo">
+            <img src="{{ c.get('about_photo', url_for('static', filename='images/dr-2.jpg')) }}" alt="Dr. Isaac Frimpong">
+            <p class="bio-quote">
+                {{ get('about_quote', '"Every person deserves to be heard, valued, and guided with dignity."') }}
+            </p>
+        </div>
+
+        <div class="bio-copy">
+            <h2>{{ get('about_bio_title', 'A counselor, not a clipboard.') }}</h2>
+            <p>
+                {{ get('about_bio_p1', "Whether you're navigating anxiety, relationship strain, grief, or personal growth — you don't have to do it alone. Based in KwaZulu-Natal, I offer both in-person and secure online sessions across South Africa.") }}
+            </p>
+
+            <p>
+                {{ get('about_bio_p2', 'My approach is grounded in respect for your story, your culture, and your pace. Together, we build clarity, practical tools, and a path forward that actually fits your life.') }}
+            </p>
+
+            <ul class="check-list">
+                <li>{{ get('about_check_1', 'Licensed Professional Counselor') }}</li>
+                <li>{{ get('about_check_2', 'Confidential & ethical practice') }}</li>
+                <li>{{ get('about_check_3', 'Culturally sensitive care') }}</li>
+                <li>{{ get('about_check_4', 'Flexible online & office sessions') }}</li>
+                <li>{{ get('about_check_5', 'Affordable & transparent fees') }}</li>
+                <li>{{ get('about_check_6', 'Crisis support available') }}</li>
+            </ul>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ===== CREDENTIALS ===== -->
+<section class="credentials">
+    <div class="wrap">
+        <p class="eyebrow center">Credentials &amp; Trust</p>
+        <h2 class="center">{{ get('credentials_title', 'Qualified, verified, and accountable.') }}</h2>
+
+        <div class="cred-grid">
+            <div class="cred-card">
+                <span class="cred-num">{{ get('cred_1_num', 'PhD') }}</span>
+                <p>{{ get('cred_1_text', 'Doctorate in Counseling') }}</p>
+            </div>
+            <div class="cred-card">
+                <span class="cred-num">{{ get('cred_2_num', '15+') }}</span>
+                <p>{{ get('cred_2_text', 'Years in practice') }}</p>
+            </div>
+            <div class="cred-card">
+                <span class="cred-num">{{ get('cred_3_num', '100%') }}</span>
+                <p>{{ get('cred_3_text', 'Confidential sessions') }}</p>
+            </div>
+        </div>
+
+        <p class="cred-note">
+            {{ get('credentials_note', 'Ongoing professional development • Member of ethical counseling bodies • Your privacy and wellbeing are my highest priority.') }}
+        </p>
+    </div>
+</section>
+
+
+<!-- ===== WHY CLIENTS TRUST ===== -->
+<section class="trust">
+    <div class="wrap">
+        <p class="eyebrow">{{ get('trust_eyebrow', 'Why clients trust Dr. Isaac') }}</p>
+        <h2>{{ get('trust_title', 'Simple things done well.') }}</h2>
+
+        <div class="trust-list">
+            <div class="trust-item">
+                <h3>{{ get('trust_1_title', 'Truly confidential') }}</h3>
+                <p>{{ get('trust_1_desc', 'What you share stays private. Ethical, secure practice.') }}</p>
+            </div>
+            <div class="trust-item">
+                <h3>{{ get('trust_2_title', 'Warm & non-judgmental') }}</h3>
+                <p>{{ get('trust_2_desc', 'You will feel heard without shame or pressure.') }}</p>
+            </div>
+            <div class="trust-item">
+                <h3>{{ get('trust_3_title', 'Practical tools') }}</h3>
+                <p>{{ get('trust_3_desc', 'Leave each session with clear next steps that work.') }}</p>
+            </div>
+            <div class="trust-item">
+                <h3>{{ get('trust_4_title', 'Flexible access') }}</h3>
+                <p>{{ get('trust_4_desc', 'In-person in KZN, or secure video anywhere in SA.') }}</p>
+            </div>
+            <div class="trust-item">
+                <h3>{{ get('trust_5_title', 'Culturally attuned') }}</h3>
+                <p>{{ get('trust_5_desc', 'Respect for your values, faith, and background.') }}</p>
+            </div>
+            <div class="trust-item">
+                <h3>{{ get('trust_6_title', 'Rapid response') }}</h3>
+                <p>{{ get('trust_6_desc', 'WhatsApp reply same day. Urgent slots available.') }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how">
+    <div class="wrap">
+        <p class="eyebrow center">{{ get('how_eyebrow', 'How it works') }}</p>
+        <h2 class="center">{{ get('how_title', '3 simple steps to start healing.') }}</h2>
+
+        <ol class="steps">
+            <li>
+                <span class="step-num">1</span>
+                <h3>{{ get('how_step_1_title', 'Reach out') }}</h3>
+                <p>{{ get('how_step_1_desc', 'Call or WhatsApp 0027 73091 8737. Tell me briefly what you need.') }}</p>
+            </li>
+            <li>
+                <span class="step-num">2</span>
+                <h3>{{ get('how_step_2_title', 'First conversation') }}</h3>
+                <p>{{ get('how_step_2_desc', 'Free 15-minute discovery call. We discuss goals and fit.') }}</p>
+            </li>
+            <li>
+                <span class="step-num">3</span>
+                <h3>{{ get('how_step_3_title', 'Begin sessions') }}</h3>
+                <p>{{ get('how_step_3_desc', 'Book weekly or biweekly — online or in-person.') }}</p>
+            </li>
+        </ol>
+
+        <div class="center-cta">
+            <a href="tel:{{ get('contact_phone', '0027730918737') }}" class="btn btn-solid">{{ get('how_cta', "Call now — I'm listening") }}</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

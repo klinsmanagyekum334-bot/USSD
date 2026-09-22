@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Services — Dr. Isaac Frimpong{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+    <div class="wrap">
+        <p class="eyebrow">{{ get('services_eyebrow', 'Services') }}</p>
+        <h1>{{ get('services_title', 'Healing, <span>tailored to you.</span>') | safe }}</h1>
+        <p class="lead narrow">
+            {{ get('services_lead', 'Choose the path that fits your season. Every session is compassionate, practical, and built around your goals.') }}
+        </p>
+    </div>
+</section>
+
+
+<!-- ===== SERVICES LIST ===== -->
+<section class="services-list">
+    <div class="wrap">
+
+        <article class="service">
+            <p class="service-index">01</p>
+            <div class="service-body">
+                <h2>{{ get('service_1_title', 'Individual Counseling') }}</h2>
+                <p>
+                    {{ get('service_1_desc', "Anxiety, stress, depression, and self-esteem. One-on-one support to help you regain clarity and calm — at your own pace.") }}
+                </p>
+                <p class="service-meta">{{ get('service_1_meta', '60–90 minute sessions • CBT & mindfulness') }}</p>
+                <a href="{{ url_for('index') }}#contact" class="text-link">{{ get('service_1_cta', 'Book a session →') }}</a>
+            </div>
+        </article>
+
+        <article class="service">
+            <p class="service-index">02</p>
+            <div class="service-body">
+                <h2>{{ get('service_2_title', 'Relationship Therapy') }}</h2>
+                <p>
+                    {{ get('service_2_desc', 'For couples and families seeking deeper connection, better communication, and real resolution — without blame.') }}
+                </p>
+                <p class="service-meta">{{ get('service_2_meta', 'Couples & family sessions • Available online') }}</p>
+                <a href="{{ url_for('index') }}#contact" class="text-link">{{ get('service_2_cta', 'Book a session →') }}</a>
+            </div>
+        </article>
+
+        <article class="service">
+            <p class="service-index">03</p>
+            <div class="service-body">
+                <h2>{{ get('service_3_title', 'Grief & Transitions') }}</h2>
+                <p>
+                    {{ get('service_3_desc', 'Loss, career change, relocation, identity shifts. Gentle guidance through seasons of change — with space to make meaning.') }}
+                </p>
+                <p class="service-meta">{{ get('service_3_meta', 'Meaning-making • Rituals for closure') }}</p>
+                <a href="{{ url_for('index') }}#contact" class="text-link">{{ get('service_3_cta', 'Book a session →') }}</a>
+            </div>
+        </article>
+
+        <article class="service">
+            <p class="service-index">04</p>
+            <div class="service-body">
+                <h2>{{ get('service_4_title', 'Personal Growth') }}</h2>
+                <p>
+                    {{ get('service_4_desc', 'Purpose, confidence, boundaries, and life design. Become the person you want to be — with practical tools that stick.') }}
+                </p>
+                <p class="service-meta">{{ get('service_4_meta', 'Strength-based • Action plans') }}</p>
+                <a href="{{ url_for('index') }}#contact" class="text-link">{{ get('service_4_cta', 'Book a session →') }}</a>
+            </div>
+        </article>
+
+    </div>
+</section>
+
+
+<!-- ===== CTA ===== -->
+<section class="closing-cta">
+    <div class="wrap center">
+        <p class="eyebrow">{{ get('closing_eyebrow', 'Not sure where to start?') }}</p>
+        <h2>{{ get('closing_title', "Let's talk it through.") }}</h2>
+        <p class="lead narrow">
+            {{ get('closing_lead', 'A free 15-minute discovery call is the simplest first step. No pressure, no commitment — just a conversation.') }}
+        </p>
+        <div class="center-cta">
+            <a href="{{ url_for('index') }}#contact" class="btn btn-solid">{{ get('closing_cta_1', 'Send a message') }}</a>
+            <a href="tel:{{ get('contact_phone', '0027730918737') }}" class="btn btn-line">{{ get('closing_cta_2', 'Call 0027 73091 8737') }}</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}{{ get('hero_eyebrow', 'Dr. Isaac Frimpong — Professional Counselor') }}{% endblock %}
+
+{% block content %}
+
+<!-- ============ TOP HALF — PHOTO BACKGROUND ============ -->
+<div class="home-hero">
+
+    <!-- ===== EMOJI STRIP + SEARCH BAR ===== -->
+    <section class="search-section">
+        <div class="wrap">
+
+            <!-- Lively emoji row -->
+            <div class="emoji-strip" id="emojiStrip" aria-hidden="true">
+                <span class="emoji" data-swap="🐝" title="Tap me">🦋</span>
+                <span class="emoji emoji-walk" title="Tap me">🚶</span>
+                <span class="emoji" data-swap="🌊" title="Tap me">💧</span>
+                <span class="emoji emoji-sway" title="Tap me">🌿</span>
+                <span class="emoji emoji-spin" title="Tap me">☀️</span>
+                <span class="emoji" data-swap="🕊️" title="Tap me">🐦</span>
+                <span class="emoji emoji-float" title="Tap me">🫧</span>
+            </div>
+
+            <div class="search-wrap" id="searchWrap">
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Search anything — anxiety, grief, books, services…"
+                    autocomplete="off"
+                    aria-label="Search the site"
+                >
+                <button id="searchGo" class="search-go">Go</button>
+                <div id="searchResults" class="search-results" role="listbox"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Eyebrow -->
+    <section class="hero-top">
+        <div class="wrap center">
+            <p class="hero-eyebrow">{{ get('hero_eyebrow', 'Counselor • South Africa') }}</p>
+
+            <div class="hero-cta center">
+                <a href="#contact" class="btn btn-solid">{{ get('hero_btn_primary', 'Book a session') }}</a>
+                <a href="{{ url_for('books') }}" class="btn btn-book">{{ get('hero_btn_secondary', 'Buy a Book') }}</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slider -->
+    <section class="hero-slider-wrap">
+        <div class="wrap">
+            <div class="hero-visual">
+                <div class="slider">
+                    <div class="slide active"><img src="{{ url_for('static', filename='images/dr-1.jpg') }}" alt="Dr. Isaac Frimpong"></div>
+                    <div class="slide"><img src="{{ url_for('static', filename='images/dr-2.jpg') }}" alt="Dr. Isaac Frimpong"></div>
+                    <div class="slide"><img src="{{ url_for('static', filename='images/dr-3.jpg') }}" alt="Dr. Isaac Frimpong"></div>
+                    <div class="slide"><img src="{{ url_for('static', filename='images/dr-4.jpg') }}" alt="Dr. Isaac Frimpong"></div>
+                    <div class="slide"><img src="{{ url_for('static', filename='images/dr-5.jpg') }}" alt="Dr. Isaac Frimpong"></div>
+                    <div class="slider-dots"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+<!-- ============ END TOP HALF ============ -->
+
+
+<!-- ============ BOTTOM HALF — DARK PURPLE BLOOM ============ -->
+<div class="home-body">
+
+    <!-- HERO TEXT -->
+    <section class="hero-text">
+        <div class="wrap center">
+            <h1>{{ get('hero_title', "You don't have to carry it <span>alone.</span>") | safe }}</h1>
+            <p class="lead center">
+                {{ get('hero_lead', 'Confidential counseling for individuals, couples and families — online or in-person across South Africa.') }}
+            </p>
+        </div>
+    </section>
+
+
+    <!-- SITUATIONS -->
+    <section class="situations" id="situations">
+        <div class="wrap center">
+            <p class="eyebrow">When to reach out</p>
+            <h2>{{ get('situations_title', "You might consider counseling if you're facing…") }}</h2>
+
+            <div class="situations-grid">
+                <div class="situation" id="s-anxiety">{{ get('situation_1', 'Anxiety or constant worry') }}</div>
+                <div class="situation" id="s-depression">{{ get('situation_2', 'Depression or low mood') }}</div>
+                <div class="situation" id="s-relationship">{{ get('situation_3', 'Relationship strain or conflict') }}</div>
+                <div class="situation" id="s-grief">{{ get('situation_4', 'Grief and loss') }}</div>
+                <div class="situation" id="s-stress">{{ get('situation_5', 'Stress and burnout') }}</div>
+                <div class="situation" id="s-selfesteem">{{ get('situation_6', 'Low self-esteem or confidence') }}</div>
+                <div class="situation" id="s-transitions">{{ get('situation_7', 'Life transitions or big decisions') }}</div>
+                <div class="situation" id="s-trauma">{{ get('situation_8', 'Trauma, fear or past hurt') }}</div>
+            </div>
+
+            <div class="center-cta">
+                <a href="#contact" class="btn btn-solid">Talk to Dr. Isaac</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- INTRO -->
+    <section class="intro" id="intro">
+        <div class="wrap center">
+            <h2>{{ get('intro_title', 'A space where you are heard.') }}</h2>
+            <div class="link-row">
+                <a href="{{ url_for('about') }}" class="text-link">{{ get('intro_link_1', 'More about Dr. Isaac →') }}</a>
+                <a href="{{ url_for('services') }}" class="text-link">{{ get('intro_link_2', 'Explore services →') }}</a>
+                <a href="{{ url_for('books') }}" class="text-link">{{ get('intro_link_3', 'Buy a Book →') }}</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- TESTIMONIALS -->
+    <section class="quotes" id="testimonials">
+        <div class="wrap">
+            <p class="eyebrow center">What clients say</p>
+
+            <div class="quotes-grid">
+                <blockquote class="quote">
+                    <p>{{ get('quote_1_text', '"I felt truly heard for the first time."') }}</p>
+                    <cite>{{ get('quote_1_name', 'Thandi M.') }} <span>{{ get('quote_1_role', '— Client since 2023') }}</span></cite>
+                </blockquote>
+
+                <blockquote class="quote">
+                    <p>{{ get('quote_2_text', '"Our marriage is stronger than ever."') }}</p>
+                    <cite>{{ get('quote_2_name', 'James K.') }} <span>{{ get('quote_2_role', '— Relationship Counseling') }}</span></cite>
+                </blockquote>
+
+                <blockquote class="quote">
+                    <p>{{ get('quote_3_text', '"His gentle guidance through grief brought me peace."') }}</p>
+                    <cite>{{ get('quote_3_name', 'Noluthando S.') }} <span>{{ get('quote_3_role', '— Grief Support') }}</span></cite>
+                </blockquote>
+
+                <blockquote class="quote">
+                    <p>{{ get('quote_4_text', '"Practical tools that actually work in daily life."') }}</p>
+                    <cite>{{ get('quote_4_name', 'Sipho D.') }} <span>{{ get('quote_4_role', '— Personal Growth') }}</span></cite>
+                </blockquote>
+
+                <blockquote class="quote">
+                    <p>{{ get('quote_5_text', '"I finally feel like myself again."') }}</p>
+                    <cite>{{ get('quote_5_name', 'Lerato P.') }} <span>{{ get('quote_5_role', '— Individual Counseling') }}</span></cite>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="wrap center">
+            <p class="eyebrow">Get in touch</p>
+            <h2>{{ get('contact_title', 'Send a confidential message.') }}</h2>
+            <p class="lead center">{{ get('contact_lead', "Choose how you'd like to reach Dr. Isaac.") }}</p>
+
+            <div class="contact-actions">
+                <a href="mailto:{{ get('contact_email', 'frimpongisaac331@gmail.com') }}?subject=Confidential%20Message&body=Hello%20Dr.%20Isaac%2C%0A%0AI%20would%20like%20to%20talk%20about..."
+                   class="btn btn-solid">
+                    ✉️ Send via Email
+                </a>
+                <a href="https://wa.me/27730918737?text=Hello%20Dr.%20Isaac%2C%20I%20would%20like%20to%20talk%20about..."
+                   target="_blank" rel="noopener"
+                   class="btn btn-wa">
+                    💬 Send via WhatsApp
+                </a>
+            </div>
+
+            <dl class="contact-list contact-list-inline">
+                <div>
+                    <dt>Phone / WhatsApp</dt>
+                    <dd>{{ get('contact_phone', '0027 73091 8737') }}</dd>
+                </div>
+                <div>
+                    <dt>Email</dt>
+                    <dd>{{ get('contact_email', 'frimpongisaac331@gmail.com') }}</dd>
+                </div>
+                <div>
+                    <dt>Location</dt>
+                    <dd>{{ get('contact_location', 'KwaZulu-Natal, South Africa') }}</dd>
+                </div>
+                <div>
+                    <dt>Hours</dt>
+                    <dd>{{ get('contact_hours', 'Mon–Sat: 8am – 8pm') }}</dd>
+                </div>
+            </dl>
+        </div>
+    </section>
+
+</div>
+<!-- ============ END BOTTOM HALF ============ -->
+
+{% endblock %}
